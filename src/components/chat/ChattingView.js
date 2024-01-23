@@ -6,8 +6,7 @@ const ChattingView = ({ roomName, onClose }) => {
     return (
         <>
             <Styled.Wrapper>
-                <button onClick={onClose}>X</button>
-                {roomName}
+                <Styled.BackBtn onClick={onClose}>&larr;</Styled.BackBtn>
                 <Chatting roomName={roomName} />
             </Styled.Wrapper>
         </>
@@ -36,6 +35,9 @@ const Wrapper = styled.div`
     }
 `;
 
+const BackBtn = styled.button``;
+
 const Styled = {
     Wrapper,
+    BackBtn,
 };

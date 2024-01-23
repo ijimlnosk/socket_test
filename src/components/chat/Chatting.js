@@ -1,3 +1,4 @@
+import defaultImg from 'assets/images/defaultImg.png';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
@@ -46,7 +47,12 @@ const Chatting = ({ roomName }) => {
 
     const sendMessage = e => {
         e.preventDefault();
-        const newMessage = { roomName: roomName, user: name, text: message };
+        const newMessage = {
+            roomName: roomName,
+            userImg: '',
+            user: name,
+            text: message,
+        };
         socket.emit('chat message', newMessage);
         setMessage('');
         setChat(prev => [...prev, newMessage]);
@@ -62,7 +68,21 @@ const Chatting = ({ roomName }) => {
                                 key={index}
                                 isUserMessage={msg.user === name}
                             >
-                                {msg.user !== name && <span>{msg.user}</span>}
+                                <Styled.MessageTitle>
+                                    {msg.user !== name && (
+                                        <Styled.UserImg
+                                            src={
+                                                msg.userImg === '' && defaultImg
+                                            }
+                                        />
+                                    )}
+                                    {msg.user !== name && (
+                                        <Styled.UserName>
+                                            {msg.user}
+                                        </Styled.UserName>
+                                    )}
+                                </Styled.MessageTitle>
+
                                 <MessageText isUserMessage={msg.user === name}>
                                     {msg.text}
                                 </MessageText>
@@ -78,7 +98,7 @@ const Chatting = ({ roomName }) => {
                         onChange={e => setMessage(e.target.value)}
                         placeholder="메세지 입력"
                     />
-                    <Button type="submit">전송</Button>
+                    <Button type="submit">&rarr;</Button>
                 </SForm>
             </Styled.Wrapper>
         </>
@@ -125,15 +145,29 @@ const Li = styled.li`
     display: flex;
     flex-direction: column;
     align-items: ${props => (props.isUserMessage ? 'flex-end' : 'flex-start')};
-    margin: 0 30px;
+    margin: 0 10px;
     margin-bottom: 5px;
     @media (max-width: 500px) {
         margin: 0 10px;
     }
 `;
 
+const MessageTitle = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const UserImg = styled.img`
+    width: 30px;
+    height: 30px;
+`;
+
+const UserName = styled.span`
+    margin-top: 4px;
+`;
+
 const MessageText = styled.span`
-    background-color: ${props => (props.isUserMessage ? '#E180E3' : '#E5D9FF')};
+    background-color: ${props => (props.isUserMessage ? '#65E928' : '#eee')};
     padding: 5px;
     border-radius: 8px;
     margin-left: 5px;
@@ -146,9 +180,12 @@ const MessageText = styled.span`
 `;
 
 const Input = styled.input`
-    width: 230px;
-    height: 50px;
+    width: 224px;
+    height: 44px;
     padding-left: 10px;
+    margin-left: 4px;
+    margin-top: 2px;
+    border: none;
     @media (max-width: 500px) {
         width: 200px;
         height: 30px;
@@ -156,20 +193,26 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-    width: 40px;
-    height: 40px;
-    margin-left: 10px;
+    width: 30px;
+    height: 30px;
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-top: 8px;
     border: none;
     border-radius: 8px;
-    background-color: #bcb2d7;
+    background-color: #fff;
     &:hover {
-        background-color: #9517a0;
+        background-color: #ccc;
     }
 `;
 
 const SForm = styled.form`
     display: flex;
     flex-direction: row;
+    width: 280px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 `;
 const Styled = {
     Wrapper,
@@ -177,4 +220,7 @@ const Styled = {
     Ul,
     SForm,
     Li,
+    MessageTitle,
+    UserImg,
+    UserName,
 };

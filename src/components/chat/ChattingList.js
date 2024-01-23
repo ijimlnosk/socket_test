@@ -1,3 +1,4 @@
+import defaultImg from 'assets/images/defaultImg.png';
 import { CustomButton } from 'components/CustomButton';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -6,16 +7,47 @@ import ChattingView from './ChattingView';
 
 const ChattingList = ({ onClose }) => {
     const [chatList, setChatList] = useState([
-        'Room1',
-        'Room2',
-        'Room3',
-        'Room4',
-        'Room5',
+        {
+            id: 1,
+            nickname: '최하영',
+            userImg: '',
+            comments: '채팅 내용',
+        },
+        {
+            id: 2,
+            nickname: '이영록',
+            userImg: '',
+            comments: '채팅 내용',
+        },
+        {
+            id: 3,
+            nickname: '허진욱',
+            userImg: '',
+            comments: '채팅 내용',
+        },
+        {
+            id: 4,
+            nickname: '장지영',
+            userImg: '',
+            comments: '채팅 내용',
+        },
+        {
+            id: 5,
+            nickname: '박채윤',
+            userImg: '',
+            comments: '채팅 내용',
+        },
+        {
+            id: 6,
+            nickname: '이윤신',
+            userImg: '',
+            comments: '채팅 내용',
+        },
     ]);
-    const [right, setRight] = useState(null);
+    const [roomView, setRoomView] = useState(null);
 
     const handleChatRoomClick = roomName => {
-        setRight(roomName.target.value);
+        setRoomView(roomName.target.value);
     };
 
     const handleAddChatRoom = () => {
@@ -25,22 +57,26 @@ const ChattingList = ({ onClose }) => {
     return (
         <>
             <Styled.Wrapper>
+                <CustomButton onClick={onClose}>X</CustomButton>
                 <Styled.Container>
-                    <CustomButton onClick={onClose}>X</CustomButton>
                     {chatList?.map((item, index) => (
                         <Styled.Box
                             key={index}
                             onClick={e => handleChatRoomClick(e)}
                             value={index + 1}
                         >
-                            {item}
+                            <img src={item.userImg === '' && defaultImg} />
+                            <Styled.TextContainer>
+                                <Styled.Span>{item.nickname}</Styled.Span>
+                                <Styled.P>{item.comments}</Styled.P>
+                            </Styled.TextContainer>
                         </Styled.Box>
                     ))}
                 </Styled.Container>
-                {right !== null && (
+                {roomView !== null && (
                     <ChattingView
-                        roomName={right}
-                        onClose={() => setRight(null)}
+                        roomName={roomView}
+                        onClose={() => setRoomView(null)}
                     />
                 )}
                 <CustomButton
@@ -80,7 +116,7 @@ const Container = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
 `;
 
@@ -88,13 +124,28 @@ const Box = styled.li`
     width: 100%;
     height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin: 10px 0;
+    padding-top: 5px;
     border: 1px solid #000;
     &:hover {
         cursor: pointer;
+        background-color: #ccc;
     }
+`;
+
+const TextContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const Span = styled.span`
+    font-size: 14px;
+`;
+
+const P = styled.p`
+    font-size: 10px;
 `;
 
 const CloseButton = styled.button``;
@@ -103,4 +154,7 @@ const Styled = {
     Wrapper,
     Container,
     Box,
+    TextContainer,
+    Span,
+    P,
 };
